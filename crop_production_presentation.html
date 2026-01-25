@@ -1,0 +1,962 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crop Production in India - Analysis</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .slide-container {
+            width: 100%;
+            height: 100vh;
+            scroll-snap-type: y mandatory;
+            overflow-y: scroll;
+            scroll-behavior: smooth;
+        }
+
+        .slide {
+            width: 100%;
+            height: 100vh;
+            scroll-snap-align: start;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 60px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Slide 1 - Title */
+        .slide-1 {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 50%, #1e3c72 100%);
+        }
+
+        .slide-1::before {
+            content: '🌾';
+            position: absolute;
+            font-size: 300px;
+            opacity: 0.1;
+            right: -50px;
+            bottom: -50px;
+        }
+
+        .title-content {
+            text-align: center;
+            z-index: 10;
+            animation: fadeInUp 1s ease-out;
+        }
+
+        .main-title {
+            font-size: 4rem;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .subtitle {
+            font-size: 1.8rem;
+            color: #a8dadc;
+            margin-bottom: 40px;
+            font-weight: 300;
+        }
+
+        .meta-info {
+            display: flex;
+            gap: 40px;
+            margin-top: 30px;
+        }
+
+        .meta-item {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 20px 40px;
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .meta-item span {
+            color: #ffd166;
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        .meta-item p {
+            color: #fff;
+            font-size: 0.9rem;
+            margin-top: 5px;
+        }
+
+        /* Slide 2 - Contents */
+        .slide-2 {
+            background: linear-gradient(135deg, #134e5e 0%, #71b280 100%);
+        }
+
+        .section-title {
+            font-size: 3rem;
+            color: #fff;
+            margin-bottom: 50px;
+            text-align: center;
+        }
+
+        .contents-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 25px;
+            max-width: 900px;
+        }
+
+        .content-card {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            padding: 30px;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .content-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .content-number {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #ffd166, #f9844a);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1a1a2e;
+        }
+
+        .content-text {
+            color: #fff;
+            font-size: 1.3rem;
+        }
+
+        /* Slide 3 - Dataset Overview */
+        .slide-3 {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            padding: 40px 30px;
+            border-radius: 20px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: transform 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: scale(1.05);
+        }
+
+        .stat-icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #ffd166;
+        }
+
+        .stat-label {
+            color: #e0e0e0;
+            font-size: 1rem;
+            margin-top: 10px;
+        }
+
+        /* Slide 4 - EDA */
+        .slide-4 {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+
+        /* Slide 5 - Key Visualizations */
+        .slide-5 {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+        }
+
+        .viz-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+            max-width: 1100px;
+        }
+
+        .viz-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+        }
+
+        .viz-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+        }
+
+        .viz-card::after {
+            content: '👆 Click to view';
+            display: block;
+            font-size: 0.75rem;
+            color: #999;
+            margin-top: 10px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .viz-card:hover::after {
+            opacity: 1;
+        }
+
+        .viz-icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+        }
+
+        .viz-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .viz-desc {
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        /* Slide 6 - Key Insights & Conclusion */
+        .slide-6 {
+            background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+        }
+
+        .insights-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 30px;
+            max-width: 1000px;
+        }
+
+        .insight-card {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+            backdrop-filter: blur(10px);
+            padding: 30px;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .insight-card h3 {
+            color: #ffd166;
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .insight-card p {
+            color: #e0e0e0;
+            line-height: 1.6;
+        }
+
+        .conclusion-box {
+            grid-column: span 2;
+            background: linear-gradient(135deg, #ffd166 0%, #f9844a 100%);
+            text-align: center;
+        }
+
+        .conclusion-box h3 {
+            color: #1a1a2e;
+            font-size: 1.8rem;
+        }
+
+        .conclusion-box p {
+            color: #333;
+            font-size: 1.1rem;
+        }
+
+        /* Modal Styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(10px);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: #fff;
+            border-radius: 25px;
+            padding: 40px;
+            max-width: 800px;
+            width: 90%;
+            max-height: 85vh;
+            overflow-y: auto;
+            position: relative;
+            animation: slideUp 0.4s ease;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 2rem;
+            cursor: pointer;
+            color: #666;
+            transition: color 0.3s ease;
+        }
+
+        .modal-close:hover {
+            color: #f5576c;
+        }
+
+        .modal-title {
+            font-size: 1.8rem;
+            color: #333;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .modal-description {
+            color: #666;
+            margin-bottom: 25px;
+            line-height: 1.6;
+        }
+
+        .chart-preview {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 15px;
+            padding: 30px;
+            min-height: 300px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* CSS Charts */
+        .bar-chart {
+            display: flex;
+            align-items: flex-end;
+            gap: 15px;
+            height: 200px;
+            padding: 20px;
+        }
+
+        .bar {
+            width: 50px;
+            border-radius: 8px 8px 0 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-end;
+            transition: height 0.5s ease;
+        }
+
+        .bar span {
+            font-size: 0.7rem;
+            color: #333;
+            margin-top: 8px;
+            text-align: center;
+        }
+
+        .pie-chart {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            background: conic-gradient(#ff6b6b 0deg 108deg,
+                    #4ecdc4 108deg 180deg,
+                    #45b7d1 180deg 234deg,
+                    #96ceb4 234deg 288deg,
+                    #ffeaa7 288deg 360deg);
+            position: relative;
+        }
+
+        .pie-chart::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80px;
+            height: 80px;
+            background: #fff;
+            border-radius: 50%;
+        }
+
+        .histogram {
+            display: flex;
+            align-items: flex-end;
+            gap: 3px;
+            height: 150px;
+        }
+
+        .hist-bar {
+            width: 20px;
+            background: linear-gradient(180deg, #667eea 0%, #764ba2 100%);
+            border-radius: 3px 3px 0 0;
+        }
+
+        .scatter-plot {
+            width: 250px;
+            height: 200px;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-left: 2px solid #333;
+            border-bottom: 2px solid #333;
+            position: relative;
+            margin: 20px;
+        }
+
+        .scatter-dot {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: #4ecdc4;
+            border-radius: 50%;
+            opacity: 0.7;
+        }
+
+        .box-plot {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 200px;
+            justify-content: center;
+        }
+
+        .box-plot-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 10px 0;
+        }
+
+        .box-plot-box {
+            width: 120px;
+            height: 40px;
+            background: linear-gradient(90deg, #ffeaa7 0%, #fdcb6e 100%);
+            border: 2px solid #f39c12;
+            border-radius: 5px;
+            position: relative;
+        }
+
+        .box-plot-box::before,
+        .box-plot-box::after {
+            content: '';
+            position: absolute;
+            height: 2px;
+            background: #e74c3c;
+            width: 30px;
+        }
+
+        .box-plot-box::before {
+            left: -35px;
+            top: 50%;
+        }
+
+        .box-plot-box::after {
+            right: -35px;
+            top: 50%;
+        }
+
+        .heatmap {
+            display: grid;
+            grid-template-columns: repeat(3, 60px);
+            gap: 5px;
+        }
+
+        .heatmap-cell {
+            width: 60px;
+            height: 60px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .line-chart {
+            width: 280px;
+            height: 150px;
+            position: relative;
+            border-left: 2px solid #333;
+            border-bottom: 2px solid #333;
+        }
+
+        .line-chart svg {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+        }
+
+        /* Navigation */
+        .nav-dots {
+            position: fixed;
+            right: 30px;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            z-index: 1000;
+        }
+
+        .nav-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .nav-dot:hover,
+        .nav-dot.active {
+            background: #ffd166;
+            transform: scale(1.3);
+        }
+
+        .slide-number {
+            position: absolute;
+            bottom: 30px;
+            left: 60px;
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 0.9rem;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .legend {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 20px;
+            justify-content: center;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.85rem;
+            color: #555;
+        }
+
+        .legend-color {
+            width: 15px;
+            height: 15px;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="slide-container" id="slideContainer">
+        <!-- Slide 1: Title -->
+        <div class="slide slide-1" id="slide1">
+            <div class="title-content">
+                <h1 class="main-title">🌾 Crop Production in India</h1>
+                <p class="subtitle">Exploratory Data Analysis & Insights</p>
+                <div class="meta-info">
+                    <div class="meta-item">
+                        <span>📊 Dataset</span>
+                        <p>Kaggle - Crop Production</p>
+                    </div>
+                    <div class="meta-item">
+                        <span>🛠️ Tools</span>
+                        <p>Python, Pandas, Seaborn</p>
+                    </div>
+                    <div class="meta-item">
+                        <span>📅 Period</span>
+                        <p>1997 - 2015</p>
+                    </div>
+                </div>
+            </div>
+            <span class="slide-number">01 / 06</span>
+        </div>
+
+        <!-- Slide 2: Contents -->
+        <div class="slide slide-2" id="slide2">
+            <h2 class="section-title">📋 Contents</h2>
+            <div class="contents-grid">
+                <div class="content-card">
+                    <div class="content-number">1</div>
+                    <div class="content-text">Load Data & Overview</div>
+                </div>
+                <div class="content-card">
+                    <div class="content-number">2</div>
+                    <div class="content-text">Descriptive Statistics</div>
+                </div>
+                <div class="content-card">
+                    <div class="content-number">3</div>
+                    <div class="content-text">Exploratory Data Analysis</div>
+                </div>
+                <div class="content-card">
+                    <div class="content-number">4</div>
+                    <div class="content-text">Data Visualizations</div>
+                </div>
+            </div>
+            <span class="slide-number">02 / 06</span>
+        </div>
+
+        <!-- Slide 3: Dataset Overview -->
+        <div class="slide slide-3" id="slide3">
+            <h2 class="section-title">📊 Dataset Overview</h2>
+            <div class="stats-container">
+                <div class="stat-card">
+                    <div class="stat-icon">📁</div>
+                    <div class="stat-value">246K+</div>
+                    <div class="stat-label">Total Records</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">🗺️</div>
+                    <div class="stat-value">33</div>
+                    <div class="stat-label">States & UTs</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">🌱</div>
+                    <div class="stat-value">124</div>
+                    <div class="stat-label">Crop Types</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">📆</div>
+                    <div class="stat-value">6</div>
+                    <div class="stat-label">Seasons</div>
+                </div>
+            </div>
+            <span class="slide-number">03 / 06</span>
+        </div>
+
+        <!-- Slide 4: Exploratory Data Analysis (EDA) -->
+        <div class="slide slide-4" id="slide4">
+            <h2 class="section-title">🔍 Exploratory Data Analysis (EDA)</h2>
+            <p style="color: rgba(255,255,255,0.8); margin-bottom: 20px; font-size: 1rem;">👆 Click any card to see the
+                chart</p>
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 25px; max-width: 1100px;">
+                <div onclick="openModal('missingvalues')"
+                    style="background: rgba(255,255,255,0.95); border-radius: 20px; padding: 30px; text-align: center; box-shadow: 0 15px 40px rgba(0,0,0,0.2); cursor: pointer; transition: transform 0.3s ease;"
+                    onmouseover="this.style.transform='translateY(-5px)'"
+                    onmouseout="this.style.transform='translateY(0)'">
+                    <div style="font-size: 3rem; margin-bottom: 15px;">⚠️</div>
+                    <h3 style="color: #f5576c; font-size: 1.3rem; margin-bottom: 10px;">Missing Values</h3>
+                    <p style="color: #333; font-size: 2rem; font-weight: 700;">3730</p>
+                    <p style="color: #666; font-size: 0.9rem; margin-top: 10px;">in Production column</p>
+                    <p style="color: #888; font-size: 0.85rem; margin-top: 5px;">Rows removed via dropna()</p>
+                </div>
+                <div onclick="openModal('boxplot')"
+                    style="background: rgba(255,255,255,0.95); border-radius: 20px; padding: 30px; text-align: center; box-shadow: 0 15px 40px rgba(0,0,0,0.2); cursor: pointer; transition: transform 0.3s ease;"
+                    onmouseover="this.style.transform='translateY(-5px)'"
+                    onmouseout="this.style.transform='translateY(0)'">
+                    <div style="font-size: 3rem; margin-bottom: 15px;">📊</div>
+                    <h3 style="color: #764ba2; font-size: 1.3rem; margin-bottom: 10px;">Outlier Detection</h3>
+                    <p style="color: #333; font-size: 1rem; font-weight: 600;">IQR Method Used</p>
+                    <p style="color: #666; font-size: 0.9rem; margin-top: 10px;">Q1, Q3, bounds calculated</p>
+                    <p style="color: #888; font-size: 0.85rem; margin-top: 5px;">Many outliers in Production</p>
+                </div>
+                <div onclick="openModal('correlation')"
+                    style="background: rgba(255,255,255,0.95); border-radius: 20px; padding: 30px; text-align: center; box-shadow: 0 15px 40px rgba(0,0,0,0.2); cursor: pointer; transition: transform 0.3s ease;"
+                    onmouseover="this.style.transform='translateY(-5px)'"
+                    onmouseout="this.style.transform='translateY(0)'">
+                    <div style="font-size: 3rem; margin-bottom: 15px;">🔗</div>
+                    <h3 style="color: #11998e; font-size: 1.3rem; margin-bottom: 10px;">Correlation</h3>
+                    <p style="color: #333; font-size: 2rem; font-weight: 700;">+0.62</p>
+                    <p style="color: #666; font-size: 0.9rem; margin-top: 10px;">Area ↔ Production</p>
+                    <p style="color: #888; font-size: 0.85rem; margin-top: 5px;">Strong positive relationship</p>
+                </div>
+            </div>
+            <div
+                style="background: rgba(255,255,255,0.15); backdrop-filter: blur(10px); padding: 25px 50px; border-radius: 15px; margin-top: 30px; border: 1px solid rgba(255,255,255,0.2);">
+                <p style="color: #fff; font-size: 1.1rem; text-align: center;">
+                    <strong>Key EDA Steps:</strong> Missing Value Analysis → Data Cleaning → Outlier Detection →
+                    Correlation Matrix → Unique Value Counts
+                </p>
+            </div>
+            <span class="slide-number">04 / 06</span>
+        </div>
+
+
+        <!-- Slide 5: Key Visualizations -->
+        <div class="slide slide-5" id="slide5">
+            <h2 class="section-title">📊 Visualizations Used</h2>
+            <p style="color: rgba(255,255,255,0.8); margin-bottom: 30px; font-size: 1.1rem;">👆 Click any card to see
+                the visualization</p>
+            <div class="viz-grid">
+                <div class="viz-card" onclick="openModal('histogram')">
+                    <div class="viz-icon">📊</div>
+                    <div class="viz-title">Histogram</div>
+                    <div class="viz-desc">Distribution of Production & Area</div>
+                </div>
+                <div class="viz-card" onclick="openModal('boxplot')">
+                    <div class="viz-icon">📦</div>
+                    <div class="viz-title">Box Plot</div>
+                    <div class="viz-desc">Outlier Detection by Season</div>
+                </div>
+                <div class="viz-card" onclick="openModal('barchart')">
+                    <div class="viz-icon">📈</div>
+                    <div class="viz-title">Bar Chart</div>
+                    <div class="viz-desc">Top States & Crops Comparison</div>
+                </div>
+                <div class="viz-card" onclick="openModal('scatter')">
+                    <div class="viz-icon">🔵</div>
+                    <div class="viz-title">Scatter Plot</div>
+                    <div class="viz-desc">Area vs Production Relationship</div>
+                </div>
+                <div class="viz-card" onclick="openModal('piechart')">
+                    <div class="viz-icon">🥧</div>
+                    <div class="viz-title">Pie Chart</div>
+                    <div class="viz-desc">State-wise Production Share</div>
+                </div>
+                <div class="viz-card" onclick="openModal('heatmap')">
+                    <div class="viz-icon">🔥</div>
+                    <div class="viz-title">Heatmap</div>
+                    <div class="viz-desc">Correlation Matrix</div>
+                </div>
+            </div>
+            <span class="slide-number">05 / 06</span>
+        </div>
+
+        <!-- Slide 6: Key Insights & Conclusion -->
+        <div class="slide slide-6" id="slide6">
+            <h2 class="section-title">💡 Key Insights</h2>
+            <div class="insights-container">
+                <div class="insight-card">
+                    <h3>🏆 Top Producer</h3>
+                    <p>Kerala dominates with 126+ Billion tonnes, driven by Coconut production (counted in nuts, not
+                        weight).</p>
+                </div>
+                <div class="insight-card">
+                    <h3>🌾 Crop Diversity</h3>
+                    <p>124 unique crops across 33 states. Rice, Wheat, and Sugarcane form the backbone of Indian
+                        agriculture.</p>
+                </div>
+                <div class="insight-card">
+                    <h3>📅 Seasonal Patterns</h3>
+                    <p>Whole Year crops contribute highest production. Kharif (monsoon) shows more variability than Rabi
+                        (winter).</p>
+                </div>
+                <div class="insight-card">
+                    <h3>📊 Key Correlation</h3>
+                    <p>Area-Production correlation (+0.62) is strong, but Year shows no significant trend — yield
+                        improvement is needed.</p>
+                </div>
+                <div class="insight-card conclusion-box">
+                    <h3>🎯 Conclusion</h3>
+                    <p>This analysis of 246K+ records (1997-2015) reveals that Indian agriculture is regionally
+                        concentrated, with Southern states leading. While production correlates with area,
+                        year-over-year yield hasn't improved significantly — suggesting focus should shift from land
+                        expansion to productivity enhancement through modern farming techniques.</p>
+                </div>
+            </div>
+            <span class="slide-number">06 / 06</span>
+        </div>
+    </div>
+
+    <!-- Modal Overlay -->
+    <div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <span class="modal-close" onclick="closeModal()">&times;</span>
+            <h2 class="modal-title" id="modalTitle"></h2>
+            <p class="modal-description" id="modalDescription"></p>
+            <div class="chart-preview" id="chartPreview"></div>
+        </div>
+    </div>
+
+    <!-- Navigation Dots -->
+    <div class="nav-dots">
+        <div class="nav-dot active" onclick="scrollToSlide(1)"></div>
+        <div class="nav-dot" onclick="scrollToSlide(2)"></div>
+        <div class="nav-dot" onclick="scrollToSlide(3)"></div>
+        <div class="nav-dot" onclick="scrollToSlide(4)"></div>
+        <div class="nav-dot" onclick="scrollToSlide(5)"></div>
+        <div class="nav-dot" onclick="scrollToSlide(6)"></div>
+    </div>
+
+    <script>
+        const container = document.getElementById('slideContainer');
+        const dots = document.querySelectorAll('.nav-dot');
+
+        function scrollToSlide(num) {
+            const slide = document.getElementById('slide' + num);
+            slide.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        container.addEventListener('scroll', () => {
+            const scrollPos = container.scrollTop;
+            const slideHeight = window.innerHeight;
+            const currentSlide = Math.round(scrollPos / slideHeight);
+
+            dots.forEach((dot, index) => {
+                dot.classList.toggle('active', index === currentSlide);
+            });
+        });
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            const modal = document.getElementById('modalOverlay');
+            if (modal.classList.contains('active')) {
+                if (e.key === 'Escape') closeModal();
+                return;
+            }
+
+            const currentScroll = container.scrollTop;
+            const slideHeight = window.innerHeight;
+            const currentSlide = Math.round(currentScroll / slideHeight);
+
+            if (e.key === 'ArrowDown' || e.key === ' ') {
+                e.preventDefault();
+                if (currentSlide < 5) scrollToSlide(currentSlide + 2);
+            } else if (e.key === 'ArrowUp') {
+                e.preventDefault();
+                if (currentSlide > 0) scrollToSlide(currentSlide);
+            }
+        });
+
+        // Modal Functions
+        const chartData = {
+            missingvalues: {
+                title: '⚠️ Missing Values Analysis',
+                description: '💡 Insight: Only Production column has 3730 missing values (1.5% of data). All other columns are complete. Missing values were handled using dropna() to ensure data quality for analysis.',
+                chart: `<img src="charts/missing_values.png" alt="Missing Values" style="max-width: 100%; border-radius: 10px; box-shadow: 0 5px 20px rgba(0,0,0,0.1);">`
+            },
+            correlation: {
+                title: '🔗 Correlation Matrix',
+                description: '💡 Insight: Area-Production correlation is strong (+0.62). Year has almost no correlation with Area (0.02) or Production (0.03), indicating production hasn\'t improved significantly over time despite more data.',
+                chart: `<img src="charts/correlation.png" alt="Correlation Matrix" style="max-width: 100%; border-radius: 10px; box-shadow: 0 5px 20px rgba(0,0,0,0.1);">`
+            },
+            histogram: {
+                title: '📊 Histogram',
+                description: '💡 Insight: Production data is heavily right-skewed with 75% of records below 8,000 tonnes. Mean (92,834) is much higher than Median (1,680), indicating extreme outliers from high-production crops like Sugarcane and Coconut.',
+                chart: `<img src="charts/histogram.png" alt="Histogram" style="max-width: 100%; border-radius: 10px; box-shadow: 0 5px 20px rgba(0,0,0,0.1);">`
+            },
+            boxplot: {
+                title: '📦 Box Plot',
+                description: '💡 Insight: "Whole Year" crops show the highest median production and most outliers. Kharif season has wider spread than Rabi. All seasons show significant outliers above Q3+1.5*IQR, indicating a few mega-production records.',
+                chart: `<img src="charts/boxplot.png" alt="Box Plot" style="max-width: 100%; border-radius: 10px; box-shadow: 0 5px 20px rgba(0,0,0,0.1);">`
+            },
+            barchart: {
+                title: '📈 Bar Chart',
+                description: '💡 Insight: Kerala leads with 126+ Billion tonnes (mainly Coconut). Andhra Pradesh and Uttar Pradesh follow. Top 10 states contribute over 80% of total production. Southern states dominate due to perennial crops.',
+                chart: `<img src="charts/barchart.png" alt="Bar Chart" style="max-width: 100%; border-radius: 10px; box-shadow: 0 5px 20px rgba(0,0,0,0.1);">`
+            },
+            scatter: {
+                title: '🔵 Scatter Plot',
+                description: '💡 Insight: Strong positive correlation (+0.62) confirms larger cultivation areas yield higher production. Log scale reveals linear trend. Some high-area, low-production outliers suggest inefficient farming or crop failures.',
+                chart: `<img src="charts/scatter.png" alt="Scatter Plot" style="max-width: 100%; border-radius: 10px; box-shadow: 0 5px 20px rgba(0,0,0,0.1);">`
+            },
+            piechart: {
+                title: '🥧 Pie Chart',
+                description: '💡 Insight: Kerala alone contributes ~40% of Top 5 states production. Andhra Pradesh (22%) and Tamil Nadu (15%) follow. These 5 states account for majority share, highlighting regional agricultural concentration in India.',
+                chart: `<img src="charts/piechart.png" alt="Pie Chart" style="max-width: 100%; border-radius: 10px; box-shadow: 0 5px 20px rgba(0,0,0,0.1);">`
+            },
+            heatmap: {
+                title: '🔥 Heatmap',
+                description: '💡 Insight: Area-Production correlation is strong (0.62). Year has weak correlation with both (0.02-0.03), meaning production hasn\'t significantly increased over time despite more data. Focus should be on yield improvement, not just area expansion.',
+                chart: `<img src="charts/heatmap.png" alt="Heatmap" style="max-width: 100%; border-radius: 10px; box-shadow: 0 5px 20px rgba(0,0,0,0.1);">`
+            }
+        };
+
+
+
+        function openModal(chartType) {
+            const data = chartData[chartType];
+            document.getElementById('modalTitle').innerHTML = data.title;
+            document.getElementById('modalDescription').textContent = data.description;
+            document.getElementById('chartPreview').innerHTML = data.chart;
+            document.getElementById('modalOverlay').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal(event) {
+            if (event && event.target !== document.getElementById('modalOverlay')) return;
+            document.getElementById('modalOverlay').classList.remove('active');
+            document.body.style.overflow = '';
+        }
+    </script>
+</body>
+
+</html>
