@@ -804,7 +804,7 @@
                     onmouseout="this.style.transform='translateY(0)'">
                     <div style="font-size: 3rem; margin-bottom: 15px;">🔗</div>
                     <h3 style="color: #11998e; font-size: 1.3rem; margin-bottom: 10px;">Correlation</h3>
-                    <p style="color: #333; font-size: 2rem; font-weight: 700;">+0.41</p>
+                    <p style="color: #333; font-size: 2rem; font-weight: 700;">+0.041</p>
                     <p style="color: #666; font-size: 0.9rem; margin-top: 10px;">Area ↔ Production</p>
                     <p style="color: #888; font-size: 0.85rem; margin-top: 5px;">Strong positive relationship</p>
                 </div>
@@ -881,7 +881,7 @@
                 </div>
                 <div class="insight-card">
                     <h3>📊 Key Correlation</h3>
-                    <p>Area-Production correlation (+0.41) is strong, but Year shows no significant trend — yield
+                    <p>Area-Production correlation (+0.041) is strong, but Year shows no significant trend — yield
                         improvement is needed.</p>
                 </div>
                 <div class="insight-card conclusion-box">
@@ -1077,7 +1077,7 @@ plt.show()</code></pre>
             },
             correlation: {
                 title: '🔗 Correlation Matrix',
-                description: '💡 Insight: Area-Production correlation is strong (+0.41). Year has almost no correlation with Area (0.02) or Production (0.03), indicating production hasn\'t improved significantly over time despite more data.',
+                description: '💡 Insight: Area–Production correlation is very weak (+0.041). Crop Year has almost no correlation with either Area (−0.025) or Production (0.007), indicating that year alone does not explain variations in agricultural output across the dataset.',
                 chart: `<img src="charts/correlation.png" alt="Correlation Matrix" style="max-width: 100%; border-radius: 10px; box-shadow: 0 5px 20px rgba(0,0,0,0.1);">
                 <div style="margin-top: 25px; text-align: left;">
                     <h4 style="color: #333; margin-bottom: 10px; font-size: 1rem;">📝 Code Snippet:</h4>
@@ -1102,7 +1102,7 @@ plt.show()</code></pre>
             histogram: {
                 title: '📊 Histogram - Production by Year',
                 description: '💡 Insight: Total crop production shows variation across years from 1997-2015. Some years show peaks due to favorable monsoon conditions, while others reflect agricultural challenges. Overall trend indicates gradual growth in Indian agriculture.',
-                chart: `<img src="charts/hist_new.png" alt="Histogram - Production by Year" style="max-width: 100%; border-radius: 10px; box-shadow: 0 5px 20px rgba(0,0,0,0.1);">
+                chart: `<img src="charts/histogram_new.png" alt="Histogram - Production by Year" style="max-width: 100%; border-radius: 10px; box-shadow: 0 5px 20px rgba(0,0,0,0.1);">
                 <div style="margin-top: 25px; text-align: left;">
                     <h4 style="color: #333; margin-bottom: 10px; font-size: 1rem;">📝 Code Snippet:</h4>
                     <pre style="background: #1e1e1e; color: #d4d4d4; padding: 15px; border-radius: 10px; overflow-x: auto; font-size: 0.85rem; font-family: 'Consolas', monospace;"><code><span style="color: #569cd6;">import</span> pandas <span style="color: #569cd6;">as</span> pd
@@ -1129,7 +1129,7 @@ plt.show()</code></pre>
             boxplot: {
                 title: '📦 Box Plot',
                 description: '💡 Insight: "Whole Year" crops show the highest median production and most outliers. Kharif season has wider spread than Rabi. All seasons show significant outliers above Q3+1.5*IQR, indicating a few mega-production records.',
-                chart: `<img src="charts/box_new.png" alt="Box Plot" style="max-width: 100%; border-radius: 10px; box-shadow: 0 5px 20px rgba(0,0,0,0.1);">
+                chart: `<img src="charts/boxplot.png" alt="Box Plot" style="max-width: 100%; border-radius: 10px; box-shadow: 0 5px 20px rgba(0,0,0,0.1);">
                 <div style="margin-top: 25px; text-align: left;">
                     <h4 style="color: #333; margin-bottom: 10px; font-size: 1rem;">📝 Code Snippet:</h4>
                     <pre style="background: #1e1e1e; color: #d4d4d4; padding: 15px; border-radius: 10px; overflow-x: auto; font-size: 0.85rem; font-family: 'Consolas', monospace;"><code><span style="color: #569cd6;">import</span> pandas <span style="color: #569cd6;">as</span> pd
@@ -1155,7 +1155,7 @@ plt.show()</code></pre>
             barchart: {
                 title: '📈 Bar Chart - Top 5 Crops',
                 description: '💡 Insight: Coconut leads with highest production (counted in nuts). Rice, Sugarcane, Wheat, and Bajra follow. These 5 crops form the backbone of Indian agriculture, representing diverse farming across regions.',
-                chart: `<img src="charts/bar_new.png" alt="Bar Chart" style="max-width: 100%; border-radius: 10px; box-shadow: 0 5px 20px rgba(0,0,0,0.1);">
+                chart: `<img src="charts/barchart.png" alt="Bar Chart" style="max-width: 100%; border-radius: 10px; box-shadow: 0 5px 20px rgba(0,0,0,0.1);">
                 <div style="margin-top: 25px; text-align: left;">
                     <h4 style="color: #333; margin-bottom: 10px; font-size: 1rem;">📝 Code Snippet:</h4>
                     <pre style="background: #1e1e1e; color: #d4d4d4; padding: 15px; border-radius: 10px; overflow-x: auto; font-size: 0.85rem; font-family: 'Consolas', monospace;"><code><span style="color: #569cd6;">import</span> pandas <span style="color: #569cd6;">as</span> pd
@@ -1182,7 +1182,7 @@ plt.show()</code></pre>
             },
             scatter: {
                 title: '🔵 Scatter Plot',
-                description: '💡 Insight: Strong positive correlation (+0.41) confirms larger cultivation areas yield higher production. Log scale reveals linear trend. Some high-area, low-production outliers suggest inefficient farming or crop failures.',
+                description: '💡 Insight: Strong positive correlation (+0.041) confirms larger cultivation areas yield higher production. Log scale reveals linear trend. Some high-area, low-production outliers suggest inefficient farming or crop failures.',
                 chart: `<img src="charts/scatter.png" alt="Scatter Plot" style="max-width: 100%; border-radius: 10px; box-shadow: 0 5px 20px rgba(0,0,0,0.1);">
                 <div style="margin-top: 25px; text-align: left;">
                     <h4 style="color: #333; margin-bottom: 10px; font-size: 1rem;">📝 Code Snippet:</h4>
@@ -1234,7 +1234,7 @@ plt.show()</code></pre>
             },
             heatmap: {
                 title: '🔥 Heatmap',
-                description: '💡 Insight: Area-Production correlation is strong (0.41). Year has weak correlation with both (0.02-0.03), meaning production hasn\'t significantly increased over time despite more data. Focus should be on yield improvement, not just area expansion.',
+                description: '💡 Insight: Area–Production correlation is very weak (+0.041). Crop Year has almost no correlation with either Area (−0.025) or Production (0.007), indicating that year alone does not explain variations in agricultural output across the dataset.',
                 chart: `<img src="charts/heatmap.png" alt="Heatmap" style="max-width: 100%; border-radius: 10px; box-shadow: 0 5px 20px rgba(0,0,0,0.1);">
                 <div style="margin-top: 25px; text-align: left;">
                     <h4 style="color: #333; margin-bottom: 10px; font-size: 1rem;">📝 Code Snippet:</h4>
@@ -1278,6 +1278,3 @@ plt.show()</code></pre>
 </body>
 
 </html>
-
-
-
