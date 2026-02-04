@@ -805,7 +805,7 @@
                     <div style="font-size: 3rem; margin-bottom: 15px;">🔗</div>
                     <h3 style="color: #11998e; font-size: 1.3rem; margin-bottom: 10px;">Correlation</h3>
                     <p style="color: #333; font-size: 2rem; font-weight: 700;">+0.041</p>
-                    <p style="color: #666; font-size: 0.9rem; margin-top: 10px;">Area ↔ Production</p>
+                    <p style="color: #666; font-size: 0.9rem; margin-top: 10px;">Area ↔️ Production</p>
                     <p style="color: #888; font-size: 0.85rem; margin-top: 5px;">Strong positive relationship</p>
                 </div>
             </div>
@@ -829,7 +829,7 @@
                 <div class="viz-card" onclick="openModal('histogram')">
                     <div class="viz-icon">📊</div>
                     <div class="viz-title">Histogram</div>
-                    <div class="viz-desc">Production by Year</div>
+                    <div class="viz-desc">Distribution of Crop Yield (Log Scale)</div>
                 </div>
                 <div class="viz-card" onclick="openModal('boxplot')">
                     <div class="viz-icon">📦</div>
@@ -1100,28 +1100,29 @@ plt.show()</code></pre>
                 </div>`
             },
             histogram: {
-                title: '📊 Histogram - Production by Year',
-                description: '💡 Insight: Total crop production shows variation across years from 1997-2015. Some years show peaks due to favorable monsoon conditions, while others reflect agricultural challenges. Overall trend indicates gradual growth in Indian agriculture.',
-                chart: `<img src="charts/histogram_new.png" alt="Histogram - Production by Year" style="max-width: 100%; border-radius: 10px; box-shadow: 0 5px 20px rgba(0,0,0,0.1);">
+                title: '📊 Histogram - Distribution of Crop Yield (Log Scale)',
+                description: '💡 Insight: Crop yield varies widely across observations, with most values concentrated around a common productivity range. Only a small number of cases show exceptionally high yields, creating a long tail on the higher end. The logarithmic scale helps display both typical and extreme yield values clearly on the same plot.',
+                chart: `<img src="charts/histogram_new.png" alt="Histogram - Distribution of Crop Yield" style="max-width: 100%; border-radius: 10px; box-shadow: 0 5px 20px rgba(0,0,0,0.1);">
                 <div style="margin-top: 25px; text-align: left;">
                     <h4 style="color: #333; margin-bottom: 10px; font-size: 1rem;">📝 Code Snippet:</h4>
                     <pre style="background: #1e1e1e; color: #d4d4d4; padding: 15px; border-radius: 10px; overflow-x: auto; font-size: 0.85rem; font-family: 'Consolas', monospace;"><code><span style="color: #569cd6;">import</span> pandas <span style="color: #569cd6;">as</span> pd
+<span style="color: #569cd6;">import</span> numpy <span style="color: #569cd6;">as</span> np
 <span style="color: #569cd6;">import</span> matplotlib.pyplot <span style="color: #569cd6;">as</span> plt
 
 <span style="color: #6a9955;"># Load and clean data</span>
 df = pd.read_csv(<span style="color: #ce9178;">'crop_production.csv'</span>)
 df_clean = df.dropna(subset=[<span style="color: #ce9178;">'Production'</span>])
 
-<span style="color: #6a9955;"># Histogram - Production by Year</span>
-yearly_production = df_clean.groupby(<span style="color: #ce9178;">'Crop_Year'</span>)[<span style="color: #ce9178;">'Production'</span>].sum()
-plt.figure(figsize=(<span style="color: #b5cea8;">12</span>, <span style="color: #b5cea8;">6</span>))
-plt.hist(yearly_production.index, bins=len(yearly_production), 
-         weights=yearly_production.values / <span style="color: #b5cea8;">1e9</span>,
-         color=<span style="color: #ce9178;">'steelblue'</span>, edgecolor=<span style="color: #ce9178;">'white'</span>, alpha=<span style="color: #b5cea8;">0.8</span>, rwidth=<span style="color: #b5cea8;">0.9</span>)
-plt.xlabel(<span style="color: #ce9178;">'Year'</span>)
-plt.ylabel(<span style="color: #ce9178;">'Total Production (Billion Tonnes)'</span>)
-plt.title(<span style="color: #ce9178;">'Histogram: Production by Year'</span>)
-plt.xticks(yearly_production.index, rotation=<span style="color: #b5cea8;">45</span>)
+<span style="color: #6a9955;"># Filter positive values and calculate yield</span>
+yield_positive = df_clean[(df_clean[<span style="color: #ce9178;">'Production'</span>] > <span style="color: #b5cea8;">0</span>) & (df_clean[<span style="color: #ce9178;">'Area'</span>] > <span style="color: #b5cea8;">0</span>)]
+log_yield = np.log10(yield_positive[<span style="color: #ce9178;">'Production'</span>] / yield_positive[<span style="color: #ce9178;">'Area'</span>])
+
+<span style="color: #6a9955;"># Histogram - Distribution of Crop Yield (Log Scale)</span>
+plt.figure(figsize=(<span style="color: #b5cea8;">10</span>, <span style="color: #b5cea8;">6</span>))
+plt.hist(log_yield, bins=<span style="color: #b5cea8;">50</span>, color=<span style="color: #ce9178;">'purple'</span>, edgecolor=<span style="color: #ce9178;">'white'</span>)
+plt.xlabel(<span style="color: #ce9178;">'log10(Yield)'</span>)
+plt.ylabel(<span style="color: #ce9178;">'Frequency'</span>)
+plt.title(<span style="color: #ce9178;">'Distribution of Crop Yield (Log Scale)'</span>)
 plt.tight_layout()
 plt.show()</code></pre>
                 </div>`
@@ -1209,7 +1210,7 @@ plt.show()</code></pre>
             },
             piechart: {
                 title: '🥧 Pie Chart',
-                description: '💡 Insight: Kerala alone contributes ~40% of Top 5 states production. Andhra Pradesh (22%) and Tamil Nadu (15%) follow. These 5 states account for majority share, highlighting regional agricultural concentration in India.',
+                description: '💡 Insight: Kerala accounts for a dominant share of production among the top five states, contributing nearly three-fourths of the total. Andhra Pradesh and Tamil Nadu follow with much smaller shares, while the remaining states contribute marginally. This indicates a strong regional concentration of agricultural production within a few states.',
                 chart: `<img src="charts/piechart.png" alt="Pie Chart" style="max-width: 100%; border-radius: 10px; box-shadow: 0 5px 20px rgba(0,0,0,0.1);">
                 <div style="margin-top: 25px; text-align: left;">
                     <h4 style="color: #333; margin-bottom: 10px; font-size: 1rem;">📝 Code Snippet:</h4>
